@@ -17,9 +17,9 @@ module Ocons_cli_shim : Types.S = struct
     let op =
       match op with
       | Types.Write (k, v) ->
-          O.Types.Write (k, v)
+          [|O.Types.Write (k, v)|]
       | Types.Read k ->
-          O.Types.Read k
+          [|O.Types.Read k|]
     in
     try
       let cmd =
@@ -47,7 +47,7 @@ module Ocons_cli_shim : Types.S = struct
         match res with
         | O.Types.Failure msg ->
             Types.Failure (`Msg msg)
-        | O.Types.(Success | ReadSuccess _) ->
+        | O.Types.(Success _) ->
             Types.Success
       in
       f (rid, res)
