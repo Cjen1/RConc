@@ -5,9 +5,9 @@ def tests(folder_path):
     params = []
 
     reference_systems = ['ocons-paxos', 'ocons-raft', 'ocons-raft-pre-vote', 'ocons-raft+sbn', 'ocons-raft-pre-vote+sbn']
-    industry_systems = ['etcd', 'zookeeper', 'zookeeper-fle', 'etcd-pre-vote', 'etcd+sbn', 'etcd-pre-vote+sbn']
+    industry_systems = ['etcd', 'etcd-pre-vote', 'etcd+sbn', 'etcd-pre-vote+sbn', 'zookeeper', 'zookeeper-fle', ]
 
-    fd_timeouts = [0.01, 0.03, 0.06, 0.11, 0.21, 0.41, 0.81]
+    fd_timeouts = [0.06, 0.11, 0.21, 0.41, 0.81]
 
     low_repeat = range(3)
     high_repeat = range(25)
@@ -37,27 +37,28 @@ def tests(folder_path):
                 'tag':'high_jitter',
                 }
 
-    ## typical failure graphs
-    #for system, repeat in it.product(
-    #    reference_systems + industry_systems,
-    #    low_repeat
-    #    ):
-    #    params.append(
-    #            low_jitter_topo(system) | {
-    #                'rate': 10000,
-    #                'repeat': repeat,
-    #                'duration': 10,
-    #                'failure':'leader',
-    #                'failure_timeout': 0.5,
-    #                'tcpdump': True,
-    #                'duration': 10,
-    #                }
-    #            )
+    # typical failure graphs
+    for system, repeat in it.product(
+        reference_systems + industry_systems,
+        #industry_systems,
+        low_repeat
+        ):
+        params.append(
+                low_jitter_topo(system) | {
+                    'rate': 1000,
+                    'repeat': repeat,
+                    'duration': 10,
+                    'failure':'leader',
+                    'failure_timeout': 1,
+                    'tcpdump': True,
+                    'duration': 20,
+                    }
+                )
 
     # TTR varying rate
     for rate, system, repeat in it.product(
-        [1000, 4000, 16000],
-        reference_systems + ['etcd', 'zookeeper', 'zookeeper-fle'],
+        [1000, 2000, 4000, 8000],
+        reference_systems + industry_systems,
         high_repeat,
         ):
         params.append(
@@ -79,7 +80,7 @@ def tests(folder_path):
         ):
         params.append(
                 topo(system) | {
-                    'rate': 10000,
+                    'rate': 1000,
                     'repeat': repeat,
                     'failure': 'leader',
                     'failure_timeout': fd_timeout,

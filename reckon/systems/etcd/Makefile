@@ -29,4 +29,4 @@ docker-build-deps:
 	unzip /tmp/pb.zip -d /tmp/pb
 	cp /tmp/pb/bin/protoc /usr/bin
 	rm -r /tmp/pb
-	go get google.golang.org/protobuf/cmd/protoc-gen-go
+	#go install google.golang.org/protobuf/cmd/protoc-gen-go@latest

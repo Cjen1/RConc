@@ -12,8 +12,14 @@ actions = []
 #import conspire
 #actions += conspire.tests(folder_path)
 
-import reckon_paper
-actions += reckon_paper.tests(folder_path)
+#import reckon_paper
+#actions += reckon_paper.tests(folder_path)
+
+#import etcd_test
+#actions += etcd_test.tests(folder_path)
+
+import diss
+actions += diss.tests(folder_path)
 
 # Shuffle to isolate ordering effects
 rng.shuffle(actions)
